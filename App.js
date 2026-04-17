@@ -10,6 +10,8 @@ import Register from './screens/registro';
 import Home from './screens/home';
 import Profile from './screens/profile';
 import Test from './screens/test'
+import Prompt from './screens/prompt';
+import PromptDoc from './screens/promptdoc';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +45,16 @@ export default function App() {
         <Stack.Screen 
           name="test" 
           component={Test} 
+        />
+
+        <Stack.Screen 
+          name="prompt" 
+          component={Prompt} 
+        />
+
+        <Stack.Screen 
+          name="promptdoc" 
+          component={PromptDoc} 
         />
 
       </Stack.Navigator>

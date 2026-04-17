@@ -18,6 +18,16 @@ export default function Home({navigation}) {
     navigation.navigate('test');
   }
 
+  const goSubirDocumento = () => {
+    setModalVisible(false);
+    navigation.navigate('promptdoc');
+  }
+
+  const goEscribirTema = () => {
+    setModalVisible(false);
+    navigation.navigate('prompt');
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -133,7 +143,7 @@ export default function Home({navigation}) {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity style={styles.optionCard} onPress={goSubirDocumento}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="cloud-upload-outline" size={22} color="#3B82F6" />
               </View>
@@ -144,7 +154,7 @@ export default function Home({navigation}) {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity style={styles.optionCard} onPress={goEscribirTema}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="create-outline" size={22} color="#3B82F6" />
               </View>
