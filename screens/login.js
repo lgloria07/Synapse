@@ -8,6 +8,10 @@ export default function LoginScreen({navigation}) {
         navigation.navigate('registro');
     }
 
+    const InicioSesion = () =>{
+        navigation.navigate('home')
+    }
+
   return (
     <View style={styles.container}>
         {/* En un scrollview, el view: tamaño del scrollview, contenContainerStyle: los elementos dentro del view */}
@@ -56,7 +60,7 @@ export default function LoginScreen({navigation}) {
           </View>
 
           {/* Iniciar Sesión */}
-          <TouchableOpacity style={styles.loginButton}>
+          <TouchableOpacity onPress={InicioSesion} style={styles.loginButton}>
             <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
           </TouchableOpacity>
 

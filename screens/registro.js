@@ -2,7 +2,7 @@ import React from 'react';
 import {ScrollView,StyleSheet,Text,TextInput,TouchableOpacity,View,Image} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function RegisterScreen({navigation}) {
+export default function Register({navigation}) {
 
     const IniciarSesion = () =>{
         navigation.navigate('login');
