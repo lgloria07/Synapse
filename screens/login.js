@@ -2,7 +2,12 @@ import React from 'react';
 import {StyleSheet,Text,TextInput,TouchableOpacity,View,Image} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}) {
+
+    const Registrate = () =>{
+        navigation.navigate('registro');
+    }
+
   return (
     <View style={styles.container}>
         {/* En un scrollview, el view: tamaño del scrollview, contenContainerStyle: los elementos dentro del view */}
@@ -58,7 +63,7 @@ export default function LoginScreen() {
           {/* Registrarse */}
           <View style={styles.registerContainer}>
             <Text style={styles.registerText}>¿No tienes cuenta? </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={Registrate}>
               <Text style={styles.registerLink}>Regístrate</Text>
             </TouchableOpacity>
           </View>
@@ -227,6 +232,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     color: '#A1A1AA',
-    lineHeight: 18,
   },
 });
