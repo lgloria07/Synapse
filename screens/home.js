@@ -26,6 +26,10 @@ export default function Home({navigation}) {
     navigation.navigate('input');
   }
 
+  const SubirAudio = () =>{
+    navigation.navigate('audio');
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -130,7 +134,7 @@ export default function Home({navigation}) {
 
             <Text style={styles.modalTitle}>Crear Nueva Nota</Text>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity onPress={SubirAudio} style={styles.optionCard}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="mic-outline" size={22} color="#3B82F6" />
               </View>

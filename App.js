@@ -13,6 +13,7 @@ import Test from './screens/test';
 import Feedback from './screens/feedback';
 import Input from './screens/imput';
 import Doc from './screens/doc';
+import Audio from './screens/audio';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,11 @@ export default function App() {
         <Stack.Screen 
           name="doc" 
           component={Doc} 
+        />
+
+        <Stack.Screen 
+          name="audio" 
+          component={Audio} 
         />
 
       </Stack.Navigator>
