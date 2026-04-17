@@ -9,7 +9,8 @@ import LoginScreen from './screens/login';
 import Register from './screens/registro';
 import Home from './screens/home';
 import Profile from './screens/profile';
-import Test from './screens/test'
+import Test from './screens/test';
+import Feedback from './screens/feedback';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,11 @@ export default function App() {
         <Stack.Screen 
           name="test" 
           component={Test} 
+        />
+
+        <Stack.Screen 
+          name="feedback" 
+          component={Feedback} 
         />
 
       </Stack.Navigator>

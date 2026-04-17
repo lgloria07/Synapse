@@ -4,19 +4,23 @@ import { Ionicons } from '@expo/vector-icons';
 import quizData from '../data/quizz.json';
 
 export default function Test({ navigation }) {
-
+  //Para saber cuantas preguntas quedan
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  //Registrar la respuesta seleccionada por el ususario
   const [selected, setSelected] = useState(null);
+  //Levar la cuenta de los puntos
   const [score, setScore] = useState(0);
+  //Mostrar pantalla de resultados cuando se terminan las preguntas
   const [finished, setFinished] = useState(false);
+  //Guardar todas las respuestas para mostrarlas en retroalimentación
   const [answers, setAnswers] = useState([]);
 
+  //Se guarda el json en una variable
   const questions = quizData.quiz;
 
+  //Navegación a "feedback", se envían como parámetros el arreglo de respuestas seleccionado por el usuario
   const verRetroalimentacion = () => {
-    navigation.navigate('feedback', {
-      answers: answers,
-    });
+    navigation.navigate('feedback', {answers: answers,});
   };
 
   const handleNext = () => {

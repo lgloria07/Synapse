@@ -7,7 +7,7 @@ export default function Feedback({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      
+      {/*  */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={22} color="#0F172A" />
@@ -18,10 +18,7 @@ export default function Feedback({ route, navigation }) {
         <View style={{ width: 22 }} />
       </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 40 }}
-      >
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
         {answers.map((item, index) => (
           <View key={index} style={styles.card}>
             
@@ -29,12 +26,7 @@ export default function Feedback({ route, navigation }) {
               {index + 1}. {item.question}
             </Text>
 
-            <View
-              style={[
-                styles.answerBox,
-                item.isCorrect ? styles.correctBox : styles.incorrectBox,
-              ]}
-            >
+            <View style={[styles.answerBox, item.isCorrect ? styles.correctBox : styles.incorrectBox,]}>
               <Text
                 style={[
                   styles.answerText,
