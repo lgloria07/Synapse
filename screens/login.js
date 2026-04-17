@@ -34,7 +34,7 @@ export default function LoginScreen({navigation}) {
 
           {/* Conectarse con Google */}
           <TouchableOpacity style={styles.googleButton}>
-            {/* AGREGAR IMAGEN DE GOOGLE */}
+            <Image style={styles.GoogleImage} resizeMode="contain" source={require('../images/google.webp')}/>
             <Text style={styles.googleButtonText}>Continuar con Google</Text>
           </TouchableOpacity>
 
@@ -140,6 +140,10 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
 },
+  GoogleImage: {
+      width: 20,
+      height: 20,
+  },
   googleButton: {
     width: '100%',
     height: 52,
