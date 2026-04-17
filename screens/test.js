@@ -9,15 +9,30 @@ export default function Test({ navigation }) {
   const [selected, setSelected] = useState(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [answers, setAnswers] = useState([]);
 
   const questions = quizData.quiz;
 
-  const verRetroalimentacion = () =>{
-    console.log("retro")
-  }
+  const verRetroalimentacion = () => {
+    navigation.navigate('feedback', {
+      answers: answers,
+    });
+  };
 
   const handleNext = () => {
     if (selected === null) return;
+
+    const updatedAnswers = [
+      ...answers,
+      {
+        question: questions[currentQuestion].pregunta,
+        selectedAnswer: questions[currentQuestion].opciones[selected].texto,
+        correctAnswer: questions[currentQuestion].opciones.find(op => op.correcta).texto,
+        isCorrect: questions[currentQuestion].opciones[selected].correcta,
+      }
+    ];
+
+    setAnswers(updatedAnswers);
 
     if (questions[currentQuestion].opciones[selected].correcta) {
       setScore(score + 1);
