@@ -11,6 +11,8 @@ import Home from './screens/home';
 import Profile from './screens/profile';
 import Test from './screens/test';
 import Feedback from './screens/feedback';
+import Input from './screens/imput';
+import Doc from './screens/doc';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +51,16 @@ export default function App() {
         <Stack.Screen 
           name="feedback" 
           component={Feedback} 
+        />
+
+        <Stack.Screen 
+          name="input" 
+          component={Input} 
+        />
+
+        <Stack.Screen 
+          name="doc" 
+          component={Doc} 
         />
 
       </Stack.Navigator>

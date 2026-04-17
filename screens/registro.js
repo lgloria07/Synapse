@@ -35,7 +35,7 @@ export default function Register({navigation}) {
 
             {/* Conectarse con Google */}
             <TouchableOpacity style={styles.googleButton}>
-              {/* AGREGAR IMAGEN DE GOOGLE */}
+              <Image style={styles.GoogleImage} resizeMode="contain" source={require('../images/google.webp')}/>
               <Text style={styles.googleButtonText}>
                 Continuar con Google
               </Text>
@@ -227,6 +227,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontSize: 13,
     color: '#94A3B8',
+  },
+  GoogleImage: {
+      width: 20,
+      height: 20,
   },
   label: {
     fontSize: 14,

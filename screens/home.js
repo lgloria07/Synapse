@@ -18,6 +18,14 @@ export default function Home({navigation}) {
     navigation.navigate('test');
   }
 
+  const SubirDoc = () =>{
+    navigation.navigate('doc');
+  }
+
+  const SubirPrompt = () =>{
+    navigation.navigate('input');
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -133,7 +141,7 @@ export default function Home({navigation}) {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity onPress={SubirDoc} style={styles.optionCard}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="cloud-upload-outline" size={22} color="#3B82F6" />
               </View>
@@ -144,7 +152,7 @@ export default function Home({navigation}) {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity onPress={SubirPrompt} style={styles.optionCard}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="create-outline" size={22} color="#3B82F6" />
               </View>
