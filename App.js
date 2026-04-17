@@ -13,34 +13,6 @@ import Test from './screens/test'
 
 const Stack = createNativeStackNavigator();
 
-//Generando componente para probar GoogleDocs 
-const Prueba = () => {
-  const handleOpenDocument = useCallback(async () => {
-    //El ID unico del documento que debería generarse al almacenarlo dentro de Google Drive
-    const fileId = '1k92MpDpuXNjmnd-K8ulXkRowfwbdAcNndvJFEVJRXMM';
-    //Formamos el path completo para abrir el documento
-    const url = `https://docs.google.com/document/d/${fileId}/edit?usp=sharing&force_shell=1`;
-    const url2 = `https://www.google.com/url?q=${url}`;
-
-    try {
-      const available = await Linking.canOpenURL(url);
-      if(available){
-        await Linking.openURL(url);
-      }
-    } catch(error){
-      console.log("Se ha producido un error al abrir el documento");
-    }
-  })
-
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => {handleOpenDocument()}}>
-        <Text style={{color: 'white', fontWeight: 'bold'}}>Probando</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
 export default function App() {
   return (
     <NavigationContainer>
@@ -63,7 +35,7 @@ export default function App() {
           component={Home} 
         />
 
-        <Stack.Screen 
+        <Stack.Screen z
           name="profile" 
           component={Profile} 
         />

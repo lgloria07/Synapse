@@ -12,6 +12,10 @@ export default function Test({ navigation }) {
 
   const questions = quizData.quiz;
 
+  const verRetroalimentacion = () =>{
+    console.log("retro")
+  }
+
   const handleNext = () => {
     if (selected === null) return;
 
@@ -50,11 +54,18 @@ export default function Test({ navigation }) {
             </Text>
           </View>
 
+          {/* BOTON DE VOLVER A HOME */}
           <TouchableOpacity 
             style={styles.primaryButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.primaryButtonText}>Volver al Inicio</Text>
+            onPress={verRetroalimentacion}>
+            <Text style={styles.primaryButtonText}>Ver retoalimentación</Text>
+          </TouchableOpacity>
+
+          {/* BOTON DE VOLVER A HOME */}
+          <TouchableOpacity 
+            style={styles.secondaryButton}
+            onPress={() => navigation.goBack()}>
+            <Text style={styles.secondaryButtonText}>Volver al Inicio</Text>
           </TouchableOpacity>
 
         </View>
@@ -118,7 +129,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F3F4F6',
     padding: 24,
-    paddingTop: 60,
+    paddingTop: 200,
   },
   header: {
     flexDirection: 'row',
@@ -186,7 +197,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
   },
-
   resultCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
@@ -228,6 +238,14 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
   },
   primaryButton: {
+    backgroundColor: '#ad5555',
+    padding: 16,
+    borderRadius: 14,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom:10,
+  },
+  secondaryButton: {
     backgroundColor: '#3B82F6',
     padding: 16,
     borderRadius: 14,
@@ -235,6 +253,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   primaryButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  secondaryButtonText: {
     color: '#FFFFFF',
     fontWeight: '600',
   },
