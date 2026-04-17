@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import quizData from '../data/quizz.json';
 
@@ -14,6 +14,10 @@ export default function Test({ navigation }) {
   const [finished, setFinished] = useState(false);
   //Guardar todas las respuestas para mostrarlas en retroalimentación
   const [answers, setAnswers] = useState([]);
+  //Mensaje de resultado
+  const [result, setResult] = useState("");
+  //Ruta de la imagen resultado 
+  const [imgResult, setImgResult] = useState("");
 
   //Se guarda el json en una variable
   const questions = quizData.quiz;
@@ -23,9 +27,11 @@ export default function Test({ navigation }) {
     navigation.navigate('feedback', {answers: answers,});
   };
 
+  //Continuar a la siguiente pregunta (si el usuario selecciono una opción)
   const handleNext = () => {
     if (selected === null) return;
 
+    //Actualizar el arreglo de respuestas, se guarda la pregunta, la respuesta seleccionada, la respuesta correcta y 
     const updatedAnswers = [
       ...answers,
       {
@@ -41,7 +47,7 @@ export default function Test({ navigation }) {
     if (questions[currentQuestion].opciones[selected].correcta) {
       setScore(score + 1);
     }
-
+    //Avanzar hasta llegar a la ultima pregunta
     if (currentQuestion + 1 < questions.length) {
       setCurrentQuestion(currentQuestion + 1);
       setSelected(null);
@@ -49,16 +55,23 @@ export default function Test({ navigation }) {
       setFinished(true);
     }
   };
-
+  //Si ya no hay mas preguntas, mostrar pantalla de resultados
   if (finished) {
     const percentage = Math.round((score / questions.length) * 100);
+    if(percentage>59){
+      setResult("Buen trabajo!")
+      setImgResult("../images/check.png");
+    }else{
+      setResult("Hay que estudiar :7")
+      setImgResult("../images/x.png");
+    }
 
     return (
       <View style={styles.container}>
         <View style={styles.resultCard}>
 
           <View style={styles.resultIcon}>
-            {/* AGREGAR ICONO DEPENDIENDO DE CALIFICACION */}
+            {/*  <Image source={require({imgResult})}/> */}
           </View>
 
           <Text style={styles.resultTitle}>Sigue practicando</Text>
@@ -73,7 +86,7 @@ export default function Test({ navigation }) {
             </Text>
           </View>
 
-          {/* BOTON DE VOLVER A HOME */}
+          {/* BOTON RETROALIMENTACION */}
           <TouchableOpacity 
             style={styles.primaryButton}
             onPress={verRetroalimentacion}>
