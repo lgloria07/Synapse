@@ -1,13 +1,19 @@
 //Imports del navigator
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
+import { useCallback } from 'react';
 
 //Se importan todas las screens que vamos a utilizar
 import LoginScreen from './screens/login';
 import Register from './screens/registro';
 import Home from './screens/home';
 import Profile from './screens/profile';
-import Test from './screens/test'
+import Test from './screens/test';
+import Feedback from './screens/feedback';
+import Input from './screens/input';
+import Doc from './screens/doc';
+import Audio from './screens/audio';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,7 +39,7 @@ export default function App() {
           component={Home} 
         />
 
-        <Stack.Screen 
+        <Stack.Screen z
           name="profile" 
           component={Profile} 
         />
@@ -43,7 +49,47 @@ export default function App() {
           component={Test} 
         />
 
+        <Stack.Screen 
+          name="feedback" 
+          component={Feedback} 
+        />
+
+        <Stack.Screen 
+          name="input" 
+          component={Input} 
+        />
+
+        <Stack.Screen 
+          name="doc" 
+          component={Doc} 
+        />
+
+        <Stack.Screen 
+          name="audio" 
+          component={Audio} 
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+//Estilos solo para poder probar la integració con GoogleDocs
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'black'
+  },
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '40%',
+    height: '10%',
+    backgroundColor: 'red',
+    borderRadius: 10,
+  }
+});

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {StyleSheet,Text,TouchableOpacity,View,ScrollView,Modal,} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Home({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,8 +20,21 @@ export default function Home({navigation}) {
     navigation.navigate('test');
   }
 
+  const SubirDoc = () =>{
+    navigation.navigate('doc');
+  }
+
+  const SubirPrompt = () =>{
+    navigation.navigate('input');
+  }
+
+  const SubirAudio = () =>{
+    navigation.navigate('audio');
+  };
+
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         
         {/* Saludo a usuario */}
@@ -122,7 +137,7 @@ export default function Home({navigation}) {
 
             <Text style={styles.modalTitle}>Crear Nueva Nota</Text>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity onPress={SubirAudio} style={styles.optionCard}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="mic-outline" size={22} color="#3B82F6" />
               </View>
@@ -133,7 +148,7 @@ export default function Home({navigation}) {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity onPress={SubirDoc} style={styles.optionCard}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="cloud-upload-outline" size={22} color="#3B82F6" />
               </View>
@@ -144,7 +159,7 @@ export default function Home({navigation}) {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity onPress={SubirPrompt} style={styles.optionCard}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="create-outline" size={22} color="#3B82F6" />
               </View>
@@ -200,7 +215,8 @@ export default function Home({navigation}) {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

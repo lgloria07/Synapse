@@ -1,6 +1,8 @@
 import React from 'react';
 import {ScrollView,StyleSheet,Text,TextInput,TouchableOpacity,View,Image} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Register({navigation}) {
 
@@ -9,7 +11,8 @@ export default function Register({navigation}) {
     }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
         {/* Logo */}
         <View style={styles.logoContainer}>
           <View style={styles.logoBox}>
@@ -35,7 +38,7 @@ export default function Register({navigation}) {
 
             {/* Conectarse con Google */}
             <TouchableOpacity style={styles.googleButton}>
-              {/* AGREGAR IMAGEN DE GOOGLE */}
+              <Image style={styles.GoogleImage} resizeMode="contain" source={require('../images/google.webp')}/>
               <Text style={styles.googleButtonText}>
                 Continuar con Google
               </Text>
@@ -135,7 +138,8 @@ export default function Register({navigation}) {
             Al registrarte, aceptas nuestros Términos y Política de Privacidad
           </Text>
         </View>
-    </View>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -227,6 +231,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontSize: 13,
     color: '#94A3B8',
+  },
+  GoogleImage: {
+      width: 20,
+      height: 20,
   },
   label: {
     fontSize: 14,

@@ -1,24 +1,51 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import quizData from '../data/quizz.json';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Test({ navigation }) {
-
+  //Para saber cuantas preguntas quedan
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  //Registrar la respuesta seleccionada por el ususario
   const [selected, setSelected] = useState(null);
+  //Levar la cuenta de los puntos
   const [score, setScore] = useState(0);
+  //Mostrar pantalla de resultados cuando se terminan las preguntas
   const [finished, setFinished] = useState(false);
+  //Guardar todas las respuestas para mostrarlas en retroalimentación
+  const [answers, setAnswers] = useState([]);
 
+  //Se guarda el json en una variable
   const questions = quizData.quiz;
 
+  //Navegación a "feedback", se envían como parámetros el arreglo de respuestas seleccionado por el usuario
+  const verRetroalimentacion = () => {
+    navigation.navigate('feedback', {answers: answers,});
+  };
+
+  //Continuar a la siguiente pregunta (si el usuario selecciono una opción)
   const handleNext = () => {
     if (selected === null) return;
+
+    //Actualizar el arreglo de respuestas, se guarda la pregunta, la respuesta seleccionada, la respuesta correcta y 
+    const updatedAnswers = [
+      ...answers,
+      {
+        question: questions[currentQuestion].pregunta,
+        selectedAnswer: questions[currentQuestion].opciones[selected].texto,
+        correctAnswer: questions[currentQuestion].opciones.find(op => op.correcta).texto,
+        isCorrect: questions[currentQuestion].opciones[selected].correcta,
+      }
+    ];
+
+    setAnswers(updatedAnswers);
 
     if (questions[currentQuestion].opciones[selected].correcta) {
       setScore(score + 1);
     }
-
+    //Avanzar hasta llegar a la ultima pregunta
     if (currentQuestion + 1 < questions.length) {
       setCurrentQuestion(currentQuestion + 1);
       setSelected(null);
@@ -26,22 +53,25 @@ export default function Test({ navigation }) {
       setFinished(true);
     }
   };
-
+  //Si ya no hay mas preguntas, mostrar pantalla de resultados
   if (finished) {
-    const percentage = Math.round((score / questions.length) * 100);
+  const percentage = Math.round((score / questions.length) * 100);
+
+  const resultText = percentage > 59 ? "Buen trabajo!" : "Reprobaste";
+  const subResultText = percentage > 59 ? "Continua asi!" : "Hay que estudiar :7";
+  const img = percentage > 59 ? require("../images/check.png") : require("../images/x.png");
 
     return (
-      <View style={styles.container}>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.container}>
         <View style={styles.resultCard}>
 
           <View style={styles.resultIcon}>
-            {/* AGREGAR ICONO DEPENDIENDO DE CALIFICACION */}
+            <Image style={styles.imageResult} resizeMode="contain" source={img} />
           </View>
 
-          <Text style={styles.resultTitle}>Sigue practicando</Text>
-          <Text style={styles.resultSubtitle}>
-            Revisa los conceptos y vuelve a intentarlo
-          </Text>
+          <Text style={styles.resultTitle}>{resultText}</Text>
+          <Text style={styles.resultSubtitle}>{subResultText}</Text>
 
           <View style={styles.scoreBox}>
             <Text style={styles.score}>{percentage}%</Text>
@@ -50,22 +80,31 @@ export default function Test({ navigation }) {
             </Text>
           </View>
 
+          {/* BOTON RETROALIMENTACION */}
           <TouchableOpacity 
             style={styles.primaryButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.primaryButtonText}>Volver al Inicio</Text>
+            onPress={verRetroalimentacion}>
+            <Text style={styles.primaryButtonText}>Ver retoalimentación</Text>
+          </TouchableOpacity>
+
+          {/* BOTON DE VOLVER A HOME */}
+          <TouchableOpacity 
+            style={styles.secondaryButton}
+            onPress={() => navigation.goBack()}>
+            <Text style={styles.secondaryButtonText}>Volver al Inicio</Text>
           </TouchableOpacity>
 
         </View>
-      </View>
+      </SafeAreaView>
+      </SafeAreaProvider>
     );
   }
 
   const question = questions[currentQuestion];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
 
       {/* Header */}
       <View style={styles.header}>
@@ -109,7 +148,8 @@ export default function Test({ navigation }) {
         <Text style={styles.nextText}>Siguiente</Text>
       </TouchableOpacity>
 
-    </View>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 const styles = StyleSheet.create({
@@ -118,7 +158,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F3F4F6',
     padding: 24,
-    paddingTop: 60,
+    paddingTop: 100,
   },
   header: {
     flexDirection: 'row',
@@ -186,7 +226,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
   },
-
   resultCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
@@ -227,7 +266,19 @@ const styles = StyleSheet.create({
   scoreText: {
     color: '#94A3B8',
   },
+  imageResult:{
+    height:50,
+    width:50,
+  },
   primaryButton: {
+    backgroundColor: '#ad5555',
+    padding: 16,
+    borderRadius: 14,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom:10,
+  },
+  secondaryButton: {
     backgroundColor: '#3B82F6',
     padding: 16,
     borderRadius: 14,
@@ -235,6 +286,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   primaryButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  secondaryButtonText: {
     color: '#FFFFFF',
     fontWeight: '600',
   },
