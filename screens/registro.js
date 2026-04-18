@@ -41,7 +41,6 @@ export default function RegisterScreen({ navigation }) {
       const user = userCredential.user;
 
       await updateProfile(user, { displayName: nombre });
-      console.log("ANTES DE FIRESTORE");
 
       await setDoc(doc(db, 'users', user.uid), {
         name: nombre,
@@ -49,17 +48,17 @@ export default function RegisterScreen({ navigation }) {
         createdAt: new Date(),
       });
       navigation.replace('home');
-    } catch (error) {
-      console.log('Error code:', error.code);
-      console.log('Error message:', error.message);
-      let mensaje = 'Ocurrió un error al registrarse';
-      if (error.code === 'auth/email-already-in-use') mensaje = 'El correo ya está registrado';
-      if (error.code === 'auth/invalid-email') mensaje = 'El correo no es válido';
-      if (error.code === 'auth/weak-password') mensaje = 'La contraseña es muy débil';
-      Alert.alert('Error', mensaje);
-    } finally {
-      setLoading(false);
-    }
+      } catch (error) {
+        console.log('Error code:', error.code);
+        console.log('Error message:', error.message);
+        let mensaje = 'Ocurrió un error al registrarse';
+        if (error.code === 'auth/email-already-in-use') mensaje = 'El correo ya está registrado';
+        if (error.code === 'auth/invalid-email') mensaje = 'El correo no es válido';
+        if (error.code === 'auth/weak-password') mensaje = 'La contraseña es muy débil';
+        Alert.alert('Error', mensaje);
+      } finally {
+        setLoading(false);
+      }
   };
 
   return (
