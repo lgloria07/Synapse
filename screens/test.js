@@ -92,7 +92,7 @@ export default function Test({ route, navigation }) {
           {/* BOTON DE VOLVER A HOME */}
           <TouchableOpacity 
             style={styles.secondaryButton}
-            onPress={navigation.navigate('home',{percentage: percentage})}>
+            onPress={() => navigation.navigate('home', { percentage })}>
             <Text style={styles.secondaryButtonText}>Volver al Inicio</Text>
           </TouchableOpacity>
 
@@ -121,7 +121,7 @@ export default function Test({ route, navigation }) {
 
       {/* Barra progreso */}
       <View style={styles.progressBar}>
-    <View style={[styles.progress,{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }]}/>
+    <View style={[styles.progress,{ width: `${questions.length ? ((currentQuestion + 1) / questions.length) * 100 : 0}%` }]}/>
       </View>
 
       {/* Pregunta */}
