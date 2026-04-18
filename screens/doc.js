@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
-export default function PromptDoc({ navigation }) {
+export default function Doc({ navigation }) {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleSelectFile = () => {

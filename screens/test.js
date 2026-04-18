@@ -14,10 +14,6 @@ export default function Test({ navigation }) {
   const [finished, setFinished] = useState(false);
   //Guardar todas las respuestas para mostrarlas en retroalimentación
   const [answers, setAnswers] = useState([]);
-  //Mensaje de resultado
-  const [result, setResult] = useState("");
-  //Ruta de la imagen resultado 
-  const [imgResult, setImgResult] = useState("");
 
   //Se guarda el json en una variable
   const questions = quizData.quiz;
@@ -57,27 +53,22 @@ export default function Test({ navigation }) {
   };
   //Si ya no hay mas preguntas, mostrar pantalla de resultados
   if (finished) {
-    const percentage = Math.round((score / questions.length) * 100);
-    if(percentage>59){
-      setResult("Buen trabajo!")
-      setImgResult("../images/check.png");
-    }else{
-      setResult("Hay que estudiar :7")
-      setImgResult("../images/x.png");
-    }
+  const percentage = Math.round((score / questions.length) * 100);
+
+  const resultText = percentage > 59 ? "Buen trabajo!" : "Reprobaste";
+  const subResultText = percentage > 59 ? "Continua asi!" : "Hay que estudiar :7";
+  const img = percentage > 59 ? require("../images/check.png") : require("../images/x.png");
 
     return (
       <View style={styles.container}>
         <View style={styles.resultCard}>
 
           <View style={styles.resultIcon}>
-            {/*  <Image source={require({imgResult})}/> */}
+            <Image style={styles.imageResult} resizeMode="contain" source={img} />
           </View>
 
-          <Text style={styles.resultTitle}>Sigue practicando</Text>
-          <Text style={styles.resultSubtitle}>
-            Revisa los conceptos y vuelve a intentarlo
-          </Text>
+          <Text style={styles.resultTitle}>{resultText}</Text>
+          <Text style={styles.resultSubtitle}>{subResultText}</Text>
 
           <View style={styles.scoreBox}>
             <Text style={styles.score}>{percentage}%</Text>
@@ -161,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F3F4F6',
     padding: 24,
-    paddingTop: 200,
+    paddingTop: 100,
   },
   header: {
     flexDirection: 'row',
@@ -268,6 +259,10 @@ const styles = StyleSheet.create({
   },
   scoreText: {
     color: '#94A3B8',
+  },
+  imageResult:{
+    height:50,
+    width:50,
   },
   primaryButton: {
     backgroundColor: '#ad5555',
