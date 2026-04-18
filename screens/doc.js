@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
 
@@ -21,7 +23,8 @@ export default function Doc({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Header */}
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -85,8 +88,9 @@ export default function Doc({ navigation }) {
           <Text style={styles.generateButtonText}>Generar Apunte</Text>
           <Ionicons name="sparkles" size={20} color="#FFFFFF" style={styles.ml8} />
         </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -223,7 +227,6 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   footer: {
-    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,

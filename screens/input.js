@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Input({ navigation }) {
   const [topic, setTopic] = useState('');
@@ -11,7 +13,8 @@ export default function Input({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.flex1}
@@ -30,7 +33,7 @@ export default function Input({ navigation }) {
           {/* Input Area */}
           <View style={styles.inputContainer}>
             <View style={styles.iconWrapper}>
-               <Ionicons name="create-outline" size={24} color="#3B82F6" />
+              <Ionicons name="create-outline" size={24} color="#3B82F6" />
             </View>
             <TextInput
               style={styles.textInput}
@@ -64,6 +67,7 @@ export default function Input({ navigation }) {
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -150,7 +154,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   footer: {
-    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,

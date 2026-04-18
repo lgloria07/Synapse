@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {StyleSheet,Text,TouchableOpacity,View,ScrollView,Modal,} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Home({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,7 +33,8 @@ export default function Home({navigation}) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         
         {/* Saludo a usuario */}
@@ -212,7 +215,8 @@ export default function Home({navigation}) {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

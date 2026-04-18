@@ -1,6 +1,8 @@
 import React from 'react';
 import {StyleSheet,Text,View,ScrollView,TouchableOpacity,Alert,} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Profile({ navigation }) {
   const stats = [
@@ -105,7 +107,8 @@ export default function Profile({ navigation }) {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -226,7 +229,8 @@ export default function Profile({ navigation }) {
           <Text style={styles.logoutText}>Cerrar Sesión</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

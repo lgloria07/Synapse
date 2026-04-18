@@ -1,12 +1,15 @@
 import React from 'react';
 import {StyleSheet,Text,View,ScrollView,TouchableOpacity,} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Feedback({ route, navigation }) {
   const { answers } = route.params;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
       {/*  */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -50,7 +53,8 @@ export default function Feedback({ route, navigation }) {
           </View>
         ))}
       </ScrollView>
-    </View>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

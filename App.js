@@ -11,7 +11,7 @@ import Home from './screens/home';
 import Profile from './screens/profile';
 import Test from './screens/test';
 import Feedback from './screens/feedback';
-import Input from './screens/imput';
+import Input from './screens/input';
 import Doc from './screens/doc';
 import Audio from './screens/audio';
 

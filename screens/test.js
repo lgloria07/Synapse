@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import quizData from '../data/quizz.json';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Test({ navigation }) {
   //Para saber cuantas preguntas quedan
@@ -60,7 +62,8 @@ export default function Test({ navigation }) {
   const img = percentage > 59 ? require("../images/check.png") : require("../images/x.png");
 
     return (
-      <View style={styles.container}>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.container}>
         <View style={styles.resultCard}>
 
           <View style={styles.resultIcon}>
@@ -92,14 +95,16 @@ export default function Test({ navigation }) {
           </TouchableOpacity>
 
         </View>
-      </View>
+      </SafeAreaView>
+      </SafeAreaProvider>
     );
   }
 
   const question = questions[currentQuestion];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
 
       {/* Header */}
       <View style={styles.header}>
@@ -143,7 +148,8 @@ export default function Test({ navigation }) {
         <Text style={styles.nextText}>Siguiente</Text>
       </TouchableOpacity>
 
-    </View>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 const styles = StyleSheet.create({
