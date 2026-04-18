@@ -15,6 +15,8 @@ export default function Home({navigation, route}) {
   useEffect(() => {
     if (route.params?.nuevaMateria) {
       setMaterias(prev => [...prev, route.params.nuevaMateria]);
+
+      navigation.setParams({ nuevaMateria: null });
     }
   }, [route.params?.nuevaMateria]);
 

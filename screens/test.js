@@ -92,7 +92,7 @@ export default function Test({ route, navigation }) {
           {/* BOTON DE VOLVER A HOME */}
           <TouchableOpacity 
             style={styles.secondaryButton}
-            onPress={() => navigation.navigate('home', { percentage })}>
+            onPress={() => navigation.goBack()}>
             <Text style={styles.secondaryButtonText}>Volver al Inicio</Text>
           </TouchableOpacity>
 
