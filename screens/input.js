@@ -10,7 +10,7 @@ export default function Input({ navigation }) {
 
   const handleGenerate = async () => {
     try {
-      const response = await fetch("http://10.109.42.203:3000/api/generar-estudio", {
+      const response = await fetch("http://10.109.42.78:3000/api/generar-estudio", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,9 +25,11 @@ export default function Input({ navigation }) {
       console.log(data.resumen)
 
       navigation.navigate("home", {
+        nuevaMateria:{
           titulo: topic,
           resumen: data.resumen,
           quiz: data.quiz
+        }
       });
 
     } catch (error) {

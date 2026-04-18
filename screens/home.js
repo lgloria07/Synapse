@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {StyleSheet,Text,TouchableOpacity,View,ScrollView,Modal,} from 'react-native';
+import {StyleSheet,Text,TouchableOpacity,View,ScrollView,Modal,Linking} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -13,11 +13,11 @@ export default function Home({navigation, route}) {
   //Guarda la materia seleccionada
   const [selectedMateria, setSelectedMateria] = useState(null);
 
-  const {titulo, resumen, quiz} = route.params;
+  const nuevaMateria = route.params?.nuevaMateria;
 
-  //Manejar la creación y vista del documento 
+  //Manejar la creación y vista del documento  prueba
   const handleDocument = () => {
-    console.log(resumen);
+    console.log(nuevaMateria?.resumen);
     generarDocumento();
   }
 
@@ -107,7 +107,7 @@ export default function Home({navigation, route}) {
   const SubirAudio = () =>{
     navigation.navigate('audio');
   };
-
+  
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
