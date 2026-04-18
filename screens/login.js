@@ -1,89 +1,153 @@
-import React from 'react';
-import {StyleSheet,Text,TextInput,TouchableOpacity,View,Image} from 'react-native';
+import React, { useState } from 'react';
+import {
+  StyleSheet, Text, TextInput, TouchableOpacity,
+  View, Image, Alert, ActivityIndicator
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function LoginScreen({navigation}) {
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
-    const Registrate = () =>{
-        navigation.navigate('registro');
+export default function LoginScreen({ navigation }) {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Por favor completa todos los campos');
+      return;
     }
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigation.replace('home'); // 👈 usa el mismo nombre de tu navigator
+    } catch (error) {
+      let mensaje = 'Ocurrió un error al iniciar sesión';
 
-    const InicioSesion = () =>{
-        navigation.navigate('home')
+      if (error.code === 'auth/user-not-found') mensaje = 'No existe una cuenta con ese correo';
+      if (error.code === 'auth/wrong-password') mensaje = 'Contraseña incorrecta';
+      if (error.code === 'auth/invalid-email') mensaje = 'El correo no es válido';
+      if (error.code === 'auth/invalid-credential') mensaje = 'Correo o contraseña incorrectos';
+
+      Alert.alert('Error', mensaje);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const Registrate = () => {
+    navigation.navigate('registro');
+  };
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        {/* En un scrollview, el view: tamaño del scrollview, contenContainerStyle: los elementos dentro del view */}
+
         {/* Logo */}
         <View style={styles.logoContainer}>
           <View style={styles.logoBox}>
-           <Image source={require("../images/logo.png")} style={styles.logoImage} resizeMode="contain"/>
+            <Image source={require("../images/logo.png")} style={styles.logoImage} resizeMode="contain" />
           </View>
 
-        {/* Eslogan */}
           <Text style={styles.appTitle}>Synapse</Text>
           <Text style={styles.subtitle}>Aprende más inteligente</Text>
         </View>
 
         <View style={styles.scrollContainer}>
-        {/* Cuadro principal */}
-        <View style={styles.card}>
-          <Text style={styles.welcomeTitle}>Bienvenidos</Text>
-          <Text style={styles.welcomeSubtitle}>Ingresa a tu cuenta para continuar</Text>
 
-          {/* Conectarse con Google */}
-          <TouchableOpacity style={styles.googleButton}>
-            <Image style={styles.GoogleImage} resizeMode="contain" source={require('../images/google.webp')}/>
-            <Text style={styles.googleButtonText}>Continuar con Google</Text>
-          </TouchableOpacity>
+          {/* Card */}
+          <View style={styles.card}>
+            <Text style={styles.welcomeTitle}>Bienvenidos</Text>
+            <Text style={styles.welcomeSubtitle}>Ingresa a tu cuenta para continuar</Text>
 
-          {/* Otra opcion (email) */}
-          <View style={styles.dividerContainer}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>O con email</Text>
-            <View style={styles.dividerLine} />
-          </View>
-
-          {/* Email */}
-          <Text style={styles.label}>Email</Text>
-          <View style={styles.inputContainer}>
-            <Ionicons name="mail-outline" size={18} color="#A0AEC0" style={styles.inputIcon}/>
-            <TextInput placeholder="tu@email.com" placeholderTextColor="#B0B7C3" style={styles.input}/>
-          </View>
-
-          {/* Password */}
-          <Text style={styles.label}>Contraseña</Text>
-          <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={18} color="#A0AEC0" style={styles.inputIcon}/>
-            <TextInput placeholder="••••••••" placeholderTextColor="#B0B7C3" secureTextEntry style={styles.input}/>
-          </View>
-
-          {/* Iniciar Sesión */}
-          <TouchableOpacity onPress={InicioSesion} style={styles.loginButton}>
-            <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
-          </TouchableOpacity>
-
-          {/* Registrarse */}
-          <View style={styles.registerContainer}>
-            <Text style={styles.registerText}>¿No tienes cuenta? </Text>
-            <TouchableOpacity onPress={Registrate}>
-              <Text style={styles.registerLink}>Regístrate</Text>
+            {/* Google */}
+            <TouchableOpacity style={styles.googleButton}>
+              <Image
+                style={styles.GoogleImage}
+                resizeMode="contain"
+                source={require('../images/google.webp')}
+              />
+              <Text style={styles.googleButtonText}>Continuar con Google</Text>
             </TouchableOpacity>
+
+            {/* Divider */}
+            <View style={styles.dividerContainer}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>O con email</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
+            {/* Email */}
+            <Text style={styles.label}>Email</Text>
+            <View style={styles.inputContainer}>
+              <Ionicons name="mail-outline" size={18} color="#A0AEC0" style={styles.inputIcon} />
+              <TextInput
+                placeholder="tu@email.com"
+                placeholderTextColor="#B0B7C3"
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
+
+            {/* Password */}
+            <Text style={styles.label}>Contraseña</Text>
+            <View style={styles.inputContainer}>
+              <Ionicons name="lock-closed-outline" size={18} color="#A0AEC0" style={styles.inputIcon} />
+              <TextInput
+                placeholder="••••••••"
+                placeholderTextColor="#B0B7C3"
+                secureTextEntry={!showPassword}
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <Ionicons
+                  name={showPassword ? "eye-off-outline" : "eye-outline"}
+                  size={18}
+                  color="#A0AEC0"
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* Login */}
+            <TouchableOpacity
+              style={[styles.loginButton, loading && { opacity: 0.7 }]}
+              onPress={handleLogin}
+              disabled={loading}
+            >
+              {loading
+                ? <ActivityIndicator color="#fff" />
+                : <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
+              }
+            </TouchableOpacity>
+
+            {/* Registro */}
+            <View style={styles.registerContainer}>
+              <Text style={styles.registerText}>¿No tienes cuenta? </Text>
+              <TouchableOpacity onPress={Registrate}>
+                <Text style={styles.registerLink}>Regístrate</Text>
+              </TouchableOpacity>
+            </View>
+
           </View>
         </View>
 
-      </View>
-      {/* Pie de pagina */}
-      <View style={styles.footerContainer}>
-        <Text style={styles.Foot}>
-          Al continuar, aceptas nuestros Términos y Política de Privacidad
-        </Text>
-      </View>
-    </SafeAreaView>
+        {/* Footer */}
+        <View style={styles.footerContainer}>
+          <Text style={styles.Foot}>
+            Al continuar, aceptas nuestros Términos y Política de Privacidad
+          </Text>
+        </View>
+
+      </SafeAreaView>
     </SafeAreaProvider>
   );
 }

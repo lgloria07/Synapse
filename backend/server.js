@@ -16,6 +16,7 @@ app.post("/api/generar-estudio", async (req, res) => {
       return res.status(400).json({ error: 'Se requiere el campo "content"' });
     }
     const result = await generarContenidoEducativo(content);
+    console.log(result)
     res.json(result);
   } catch (error) {
     console.error('Error en la API:', error);

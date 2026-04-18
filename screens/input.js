@@ -7,9 +7,32 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 export default function Input({ navigation }) {
   const [topic, setTopic] = useState('');
 
-  const handleGenerate = () => {
-    // Placeholder for future logic
-    console.log('Generando apunte para:', topic);
+
+  const handleGenerate = async () => {
+    try {
+      const response = await fetch("http://172.20.10.5:3000/api/generar-estudio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: topic,
+        }),
+      });
+
+      const data = await response.json();
+
+      navigation.navigate("home", {
+        nuevaMateria: {
+          titulo: topic,
+          resumen: data.resumen,
+          quiz: data.quiz
+        }
+      });
+
+    } catch (error) {
+      console.log("Error generando contenido:", error);
+    }
   };
 
   return (

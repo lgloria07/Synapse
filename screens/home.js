@@ -1,24 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {StyleSheet,Text,TouchableOpacity,View,ScrollView,Modal,} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function Home({navigation}) {
+export default function Home({navigation, route}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [subjectModalVisible, setSubjectModalVisible] = useState(false);
+  //Crea una lista de materias trabajadas
+  const [materias, setMaterias] = useState([]);
+  //Guarda la materia seleccionada
+  const [selectedMateria, setSelectedMateria] = useState(null);
+
+  useEffect(() => {
+    if (route.params?.nuevaMateria) {
+      setMaterias(prev => [...prev, route.params.nuevaMateria]);
+    }
+  }, [route.params?.nuevaMateria]);
 
   const Profile = () =>{
     navigation.navigate('profile');
   }
 
-  const openSubjectOptions = () => {
+  const openSubjectOptions = (materia) => {
+    setSelectedMateria(materia);
     setSubjectModalVisible(true);
   }
 
-  const realizarEvaluacion = () =>{
-    navigation.navigate('test');
-  }
+  const realizarEvaluacion = (materia) => {
+  navigation.navigate('test', { quiz: materia.quiz });
+  };
 
   const SubirDoc = () =>{
     navigation.navigate('doc');
@@ -78,45 +89,21 @@ export default function Home({navigation}) {
         <Text style={styles.sectionTitle}>Apuntes Recientes</Text>
 
         {/* Materias */}
-        <TouchableOpacity style={styles.noteCard} onPress={openSubjectOptions}>
+        {materias.map((materia, index) => (
+        <TouchableOpacity 
+          key={index}
+          style={styles.noteCard}
+          onPress={() => openSubjectOptions(materia)}
+        >
           <View>
-            <Text style={styles.noteTitle}>Materia 1</Text>
-            <Text style={styles.noteDate}>Hace 2 horas</Text>
+            <Text style={styles.noteTitle}>{materia.titulo}</Text>
+            <Text style={styles.noteDate}>Nuevo</Text>
           </View>
           <View style={styles.badge}>
             <Text style={styles.badgeText}>0%</Text>
           </View>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.noteCard} onPress={openSubjectOptions}>
-          <View>
-            <Text style={styles.noteTitle}>Materia 2</Text>
-            <Text style={styles.noteDate}>Ayer</Text>
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>0%</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.noteCard} onPress={openSubjectOptions}>
-          <View>
-            <Text style={styles.noteTitle}>Materia 3</Text>
-            <Text style={styles.noteDate}>Hace 3 días</Text>
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>0%</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={[styles.noteCard, { marginBottom: 100 }]} onPress={openSubjectOptions}>
-          <View>
-            <Text style={styles.noteTitle}>Materia 4</Text>
-            <Text style={styles.noteDate}>Hace 1 semana</Text>
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>0%</Text>
-          </View>
-        </TouchableOpacity>
+      ))}
       </ScrollView>
 
       {/* Agregar contenido */}
@@ -196,7 +183,7 @@ export default function Home({navigation}) {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={realizarEvaluacion} style={styles.optionCard}>
+            <TouchableOpacity onPress={() => realizarEvaluacion(selectedMateria)} style={styles.optionCard}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="create-outline" size={22} color="#3B82F6" />
               </View>

@@ -1,6 +1,7 @@
 //Imports del navigator
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import { StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
 import { useCallback } from 'react';
 

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import quizData from '../data/quizz.json';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function Test({ navigation }) {
+export default function Test({ route, navigation }) {
+  //Preguntas obtenidas de gemini
+  const questions = route.params?.quiz || [];
+  console.log(questions)
+  console.log("QUIZ:", questions);
   //Para saber cuantas preguntas quedan
   const [currentQuestion, setCurrentQuestion] = useState(0);
   //Registrar la respuesta seleccionada por el ususario
@@ -17,8 +21,6 @@ export default function Test({ navigation }) {
   //Guardar todas las respuestas para mostrarlas en retroalimentación
   const [answers, setAnswers] = useState([]);
 
-  //Se guarda el json en una variable
-  const questions = quizData.quiz;
 
   //Navegación a "feedback", se envían como parámetros el arreglo de respuestas seleccionado por el usuario
   const verRetroalimentacion = () => {
@@ -90,7 +92,7 @@ export default function Test({ navigation }) {
           {/* BOTON DE VOLVER A HOME */}
           <TouchableOpacity 
             style={styles.secondaryButton}
-            onPress={() => navigation.goBack()}>
+            onPress={navigation.navigate('home',{percentage: percentage})}>
             <Text style={styles.secondaryButtonText}>Volver al Inicio</Text>
           </TouchableOpacity>
 
@@ -119,7 +121,7 @@ export default function Test({ navigation }) {
 
       {/* Barra progreso */}
       <View style={styles.progressBar}>
-        <View style={[styles.progress,{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }]} />
+    <View style={[styles.progress,{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }]}/>
       </View>
 
       {/* Pregunta */}
@@ -158,7 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F3F4F6',
     padding: 24,
-    paddingTop: 100,
+    paddingTop: 40,
   },
   header: {
     flexDirection: 'row',

@@ -1,9 +1,10 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: './.env' });
+const GOOGLE_API_KEY= "AIzaSyCMClx2kZp0kBcjN5KBHQqqsHeyIpII-Ms"
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "AIzaSyD_2CW4tub-LtWfNDoxFNj7Z5EtvzLT_o0");
+const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
 
 // Configuramos el modelo para que SIEMPRE responda en formato JSON
 const model = genAI.getGenerativeModel({ 
@@ -14,13 +15,19 @@ const model = genAI.getGenerativeModel({
 export const generarContenidoEducativo = async (tema) => {
   const prompt = `
     Genera material educativo sobre el tema: "${tema}".
-    Responde estrictamente con el siguiente esquema JSON:
-    
+
+    IMPORTANTE:
+    - Responde SOLO en JSON válido
+    - NO agregues texto extra
+    - NO cambies la estructura
+
+    Formato EXACTO:
+
     {
-      "resumen": "Contenido detallado en formato Markdown",
+      "resumen": "Texto en markdown",
       "quiz": [
         {
-          "pregunta": "Texto de la pregunta",
+          "pregunta": "Texto",
           "opciones": [
             { "texto": "Opción A", "correcta": false },
             { "texto": "Opción B", "correcta": true },
@@ -28,11 +35,16 @@ export const generarContenidoEducativo = async (tema) => {
             { "texto": "Opción D", "correcta": false }
           ]
         }
-      ],
+      ]
     }
-  `;
+    `;
   
   const result = await model.generateContent(prompt);
   const response = await result.response;
-  return JSON.parse(response.text());
+  try {
+    return JSON.parse(response.text());
+  } catch (error) {
+    console.log("Error parseando JSON:", response.text());
+    throw error;
+}
 };
