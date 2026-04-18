@@ -1,0 +1,6 @@
+POST http://localhost:3000/api/generar-estudio
+Content-Type: application/json
+
+{
+    "content": "El ciclo del agua"
+}
