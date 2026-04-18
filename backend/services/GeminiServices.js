@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 
 dotenv.config({ path: './.env' });
-const GOOGLE_API_KEY= "AIzaSyDeo24ShkkObY6IvUpfSDbr1wNd5JO3cTA"
+const GOOGLE_API_KEY= "AIzaSyCmrHDuB7dPh8w9B0PqnNUP-93OgsntHgc"
 
 const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
 
@@ -19,7 +19,7 @@ export const generarContenidoEducativo = async (tema) => {
     IMPORTANTE:
     - Responde SOLO en JSON válido
     - NO agregues texto extra
-    - NO cambies la estructura
+    - NO cambies la estructuraÑ
 
     Formato EXACTO:
 
@@ -41,6 +41,9 @@ export const generarContenidoEducativo = async (tema) => {
   
   const result = await model.generateContent(prompt);
   const response = await result.response;
+  console.log("INICIO DEL RESPONSE")
+  console.log(response);
+  console.log("FIN DEL RESPONSE")
   try {
     return JSON.parse(response.text());
   } catch (error) {
