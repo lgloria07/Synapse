@@ -17,43 +17,39 @@ export default function Home({navigation, route}) {
 
   //Manejar la creación y vista del documento  prueba
   const handleDocument = () => {
-    console.log(nuevaMateria?.resumen);
-    generarDocumento();
-  }
+    if (!selectedMateria) return;
+
+    console.log(selectedMateria.resumen);
+    generarDocumento(selectedMateria);
+  };
 
   //Generación del documento 
-  const generarDocumento = useCallback(async () => {
-    //Tratando de generar el documento
-    const script_local = 'https://script.google.com/macros/s/AKfycbyK4ZjzfhTVzJbO75Z0aJJ3OsO1y2IYq64EkNf-BMtpWEjdg8obVVceZFIptFi5sSMF7g/exec';
+ const generarDocumento = useCallback(async (materia) => {
 
-    //Creamos un objeto para manejar la solicitud de prueba
+    const script_local = 'https://script.google.com/macros/s/...';
+
     const solicitud = {
-      titulo: titulo || 'Nuevo documento',
-      content: resumen||  '#HolaMundo\nEste es un documento generado por Gemini.'
+      titulo: materia.titulo || 'Nuevo documento',
+      content: materia.resumen || '#HolaMundo'
     };
 
-    try{
+    try {
       const response = await fetch(script_local, {
         method: 'POST',
-        mode: 'cors',
         headers: {
           'Content-Type': 'text/plain;charset=utf-8',
         },
         body: JSON.stringify(solicitud)
       });
 
-      console.log(response);
-
       const resultado = await response.json();
-      console.log("Respuesta:", resultado);
-      openDocument(resultado.id);
+      openDocument(resultado.url);
 
-    }catch(error){
-      console.log("Error al tratar de conectar con el script de google")
+    } catch (error) {
       console.log(error);
     }
 
-  }, [route.params]);
+  }, []);
 
   //Abrir el documento
   const openDocument = useCallback(async (id) => {
