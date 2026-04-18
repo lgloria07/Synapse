@@ -3,6 +3,7 @@ import {StyleSheet,Text,TouchableOpacity,View,ScrollView,Modal,} from 'react-nat
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useCallback }  from 'react';
 
 export default function Home({navigation, route}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -11,6 +12,68 @@ export default function Home({navigation, route}) {
   const [materias, setMaterias] = useState([]);
   //Guarda la materia seleccionada
   const [selectedMateria, setSelectedMateria] = useState(null);
+
+  const {titulo, resumen, quiz} = route.params;
+
+  //Manejar la creación y vista del documento 
+  const handleDocument = () => {
+    console.log(resumen);
+    generarDocumento();
+  }
+
+  //Generación del documento 
+  const generarDocumento = useCallback(async () => {
+    //Tratando de generar el documento
+    const script_local = 'https://script.google.com/macros/s/AKfycbyK4ZjzfhTVzJbO75Z0aJJ3OsO1y2IYq64EkNf-BMtpWEjdg8obVVceZFIptFi5sSMF7g/exec';
+
+    //Creamos un objeto para manejar la solicitud de prueba
+    const solicitud = {
+      titulo: titulo || 'Nuevo documento',
+      content: resumen||  '#HolaMundo\nEste es un documento generado por Gemini.'
+    };
+
+    try{
+      const response = await fetch(script_local, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(solicitud)
+      });
+
+      console.log(response);
+
+      const resultado = await response.json();
+      console.log("Respuesta:", resultado);
+      openDocument(resultado.id);
+
+    }catch(error){
+      console.log("Error al tratar de conectar con el script de google")
+      console.log(error);
+    }
+
+  }, [route.params]);
+
+  //Abrir el documento
+  const openDocument = useCallback(async (id) => {
+    //El ID unico del documento que debería generarse al almacenarlo dentro de Google Drive
+    const fileId = id;
+    //Formamos el path completo para abrir el documento
+    const url = `https://docs.google.com/document/d/${id}/edit`;
+
+    try {
+      const available = await Linking.canOpenURL(url);
+      if(available){
+        await Linking.openURL(url);
+      }
+      else{
+        await Linking.openURL(url);
+      }
+    } catch(error){
+      console.log("Se ha producido un error al abrir el documento");
+    }
+  });
 
   useEffect(() => {
     if (route.params?.nuevaMateria) {
@@ -175,7 +238,7 @@ export default function Home({navigation, route}) {
             <View style={styles.modalBar} />
             <Text style={styles.modalTitle}>Opciones</Text>
 
-            <TouchableOpacity style={styles.optionCard}>
+            <TouchableOpacity style={styles.optionCard} onPress={() => {handleDocument()}}>
               <View style={styles.optionIconContainer}>
                 <Ionicons name="document-text-outline" size={22} color="#3B82F6" />
               </View>
