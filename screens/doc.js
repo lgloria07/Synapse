@@ -1,265 +1,187 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import {
+    View, Text, TouchableOpacity, StyleSheet,
+    Alert, ActivityIndicator
+} from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-const { width } = Dimensions.get('window');
+export default function DocScreen({ navigation }) {
+    const [archivo, setArchivo] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-export default function Doc({ navigation }) {
-  const [selectedFile, setSelectedFile] = useState(null);
+    const abrirExplorador = async () => {
+        try {
+            const resultado = await DocumentPicker.getDocumentAsync({
+                type: ['application/pdf'],  // solo PDFs por ahora
+                copyToCacheDirectory: true,
+            });
 
-  const handleSelectFile = () => {
-    
-    setSelectedFile({ name: 'Lectura_Semana_5.pdf', size: '1.2 MB' });
-  };
+            if (!resultado.canceled) {
+                const archivo = resultado.assets[0];
+                setArchivo(archivo);
+                console.log('Archivo seleccionado:', archivo.name);
+                console.log('URI:', archivo.uri);
+                console.log('Tamaño:', archivo.size);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'No se pudo abrir el explorador de archivos');
+            console.log(error);
+        }
+    };
 
-  const handleGenerate = () => {
-    console.log('Generando apunte para el archivo:', selectedFile?.name);
-  };
+    const procesarDocumento = async () => {
+        if (!archivo) {
+            Alert.alert('Error', 'Primero selecciona un documento');
+            return;
+        }
+        setLoading(true);
+        // Aquí David conectará con Gemini para procesar el PDF
+        console.log('Procesando:', archivo.name);
+        setLoading(false);
+    };
 
-  const removeFile = () => {
-    setSelectedFile(null);
-  };
+    return (
+        <SafeAreaView style={styles.container}>
 
-  return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Header */}
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#0F172A" />
-        </TouchableOpacity>
-
-        <View style={styles.headerTextContainer}>
-          <Text style={styles.title}>Subir Documento</Text>
-          <Text style={styles.subtitle}>Analizaremos tu archivo para crear los mejores apuntes.</Text>
-        </View>
-
-        {/* Area de subir archivos */}
-        {!selectedFile ? (
-          <TouchableOpacity 
-            style={styles.uploadCard} 
-            onPress={handleSelectFile}
-            activeOpacity={0.7}
-          >
-            <View style={styles.uploadIconContainer}>
-              <Ionicons name="cloud-upload-outline" size={40} color="#3B82F6" />
+            {/* Header */}
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="arrow-back" size={24} color="#0F172A" />
+                </TouchableOpacity>
+                <Text style={styles.headerTitle}>Subir Documento</Text>
+                <View style={{ width: 24 }} />
             </View>
-            <Text style={styles.uploadTitle}>Seleccionar PDF</Text>
-            <Text style={styles.uploadSubtitle}>Toca para buscar en tus archivos</Text>
-            <View style={styles.formatBadge}>
-               <Text style={styles.formatText}>Solo PDF</Text>
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.fileSelectedCard}>
-            <View style={styles.fileInfo}>
-              <View style={styles.pdfIconContainer}>
-                <Ionicons name="document-text" size={30} color="#EF4444" />
-              </View>
-              <View style={styles.flex1}>
-                <Text style={styles.fileName} numberOfLines={1}>{selectedFile.name}</Text>
-                <Text style={styles.fileSize}>{selectedFile.size}</Text>
-              </View>
-              <TouchableOpacity onPress={removeFile} style={styles.removeButton}>
-                <Ionicons name="close-circle" size={24} color="#94A3B8" />
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
 
-        <View style={styles.infoCard}>
-           <Ionicons name="shield-checkmark-outline" size={20} color="#10B981" />
-           <Text style={styles.infoText}>
-             Tus documentos están seguros y solo se usan para generar tus apuntes.
-           </Text>
-        </View>
+            {/* Zona de subida */}
+            <TouchableOpacity style={styles.uploadZone} onPress={abrirExplorador}>
+                <Ionicons name="cloud-upload-outline" size={48} color="#3B82F6" />
+                <Text style={styles.uploadTitle}>Seleccionar archivo</Text>
+                <Text style={styles.uploadSubtitle}>PDF • Toca para explorar</Text>
+            </TouchableOpacity>
 
-      </ScrollView>
+            {/* Archivo seleccionado */}
+            {archivo && (
+                <View style={styles.archivoCard}>
+                    <View style={styles.archivoIconContainer}>
+                        <Ionicons name="document-text-outline" size={24} color="#3B82F6" />
+                    </View>
+                    <View style={styles.archivoInfo}>
+                        <Text style={styles.archivoNombre} numberOfLines={1}>
+                            {archivo.name}
+                        </Text>
+                        <Text style={styles.archivoTamaño}>
+                            {(archivo.size / 1024).toFixed(1)} KB
+                        </Text>
+                    </View>
+                    <TouchableOpacity onPress={() => setArchivo(null)}>
+                        <Ionicons name="close-circle-outline" size={22} color="#94A3B8" />
+                    </TouchableOpacity>
+                </View>
+            )}
 
-      {/* Action Button */}
-      <View style={styles.footer}>
-        <TouchableOpacity 
-          style={[styles.generateButton, !selectedFile && styles.buttonDisabled]} 
-          onPress={handleGenerate}
-          disabled={!selectedFile}
-        >
-          <Text style={styles.generateButtonText}>Generar Apunte</Text>
-          <Ionicons name="sparkles" size={20} color="#FFFFFF" style={styles.ml8} />
-        </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
-  );
+            {/* Botón procesar */}
+            <TouchableOpacity
+                style={[styles.botonProcesar, !archivo && styles.botonDeshabilitado]}
+                onPress={procesarDocumento}
+                disabled={!archivo || loading}
+            >
+                {loading
+                    ? <ActivityIndicator color="#fff" />
+                    : <Text style={styles.botonTexto}>Generar Apuntes</Text>
+                }
+            </TouchableOpacity>
+
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F3F4F6',
-  },
-  scrollContent: {
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 100,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 3,
-    marginBottom: 24,
-  },
-  headerTextContainer: {
-    marginBottom: 32,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#0F172A',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#94A3B8',
-    marginTop: 8,
-    lineHeight: 22,
-  },
-  uploadCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    padding: 40,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#E5E7EB',
-    borderStyle: 'dashed',
-  },
-  uploadIconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#EAF2FF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  uploadTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#0F172A',
-    marginBottom: 8,
-  },
-  uploadSubtitle: {
-    fontSize: 14,
-    color: '#94A3B8',
-    marginBottom: 20,
-  },
-  formatBadge: {
-    backgroundColor: '#F1F5F9',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  formatText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#64748B',
-    textTransform: 'uppercase',
-  },
-  fileSelectedCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: '#3B82F6',
-    shadowColor: '#3B82F6',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 2,
-  },
-  fileInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  pdfIconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 12,
-    backgroundColor: '#FEF2F2',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  fileName: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#0F172A',
-  },
-  fileSize: {
-    fontSize: 13,
-    color: '#94A3B8',
-    marginTop: 2,
-  },
-  removeButton: {
-    padding: 4,
-  },
-  infoCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 32,
-    backgroundColor: '#ECFDF5',
-    padding: 16,
-    borderRadius: 16,
-  },
-  infoText: {
-    fontSize: 13,
-    color: '#065F46',
-    marginLeft: 12,
-    flex: 1,
-    lineHeight: 18,
-  },
-  footer: {
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 24,
-    backgroundColor: '#F3F4F6',
-  },
-  generateButton: {
-    backgroundColor: '#3B82F6',
-    borderRadius: 20,
-    paddingVertical: 18,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#3B82F6',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 15,
-    elevation: 6,
-  },
-  buttonDisabled: {
-    backgroundColor: '#94A3B8',
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  generateButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  ml8: {
-    marginLeft: 8,
-  },
-  flex1: {
-    flex: 1,
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#F3F4F6',
+        paddingHorizontal: 24,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 16,
+        marginBottom: 32,
+    },
+    headerTitle: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: '#0F172A',
+    },
+    uploadZone: {
+        backgroundColor: '#EEF4FF',
+        borderRadius: 24,
+        borderWidth: 2,
+        borderColor: '#BFDBFE',
+        borderStyle: 'dashed',
+        paddingVertical: 48,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 24,
+    },
+    uploadTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#0F172A',
+        marginTop: 16,
+    },
+    uploadSubtitle: {
+        fontSize: 14,
+        color: '#94A3B8',
+        marginTop: 6,
+    },
+    archivoCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 24,
+        borderWidth: 0.5,
+        borderColor: '#E5E7EB',
+    },
+    archivoIconContainer: {
+        width: 44,
+        height: 44,
+        borderRadius: 12,
+        backgroundColor: '#EEF4FF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+    archivoInfo: {
+        flex: 1,
+    },
+    archivoNombre: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#0F172A',
+    },
+    archivoTamaño: {
+        fontSize: 13,
+        color: '#94A3B8',
+        marginTop: 2,
+    },
+    botonProcesar: {
+        height: 54,
+        backgroundColor: '#3B82F6',
+        borderRadius: 14,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    botonDeshabilitado: {
+        backgroundColor: '#BFDBFE',
+    },
+    botonTexto: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '700',
+    },
 });
