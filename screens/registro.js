@@ -1,6 +1,8 @@
 import React from 'react';
 import {ScrollView,StyleSheet,Text,TextInput,TouchableOpacity,View,Image} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Register({navigation}) {
 
@@ -9,7 +11,8 @@ export default function Register({navigation}) {
     }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
         {/* Logo */}
         <View style={styles.logoContainer}>
           <View style={styles.logoBox}>
@@ -135,7 +138,8 @@ export default function Register({navigation}) {
             Al registrarte, aceptas nuestros Términos y Política de Privacidad
           </Text>
         </View>
-    </View>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

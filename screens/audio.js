@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 /**
@@ -43,7 +45,8 @@ export default function Audio({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
       {/* 
         El KeyboardAvoidingView sirve para que el teclado no nos tape
         los botones o el contenido importante de la pantalla.
@@ -155,6 +158,7 @@ export default function Audio({ navigation }) {
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -332,7 +336,6 @@ const styles = StyleSheet.create({
 
   // Botón azul de abajo
   footer: {
-    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,

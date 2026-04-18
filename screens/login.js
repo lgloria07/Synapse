@@ -1,6 +1,8 @@
 import React from 'react';
 import {StyleSheet,Text,TextInput,TouchableOpacity,View,Image} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function LoginScreen({navigation}) {
 
@@ -13,7 +15,8 @@ export default function LoginScreen({navigation}) {
     }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
         {/* En un scrollview, el view: tamaño del scrollview, contenContainerStyle: los elementos dentro del view */}
         {/* Logo */}
         <View style={styles.logoContainer}>
@@ -72,7 +75,7 @@ export default function LoginScreen({navigation}) {
             </TouchableOpacity>
           </View>
         </View>
- 
+
       </View>
       {/* Pie de pagina */}
       <View style={styles.footerContainer}>
@@ -80,7 +83,8 @@ export default function LoginScreen({navigation}) {
           Al continuar, aceptas nuestros Términos y Política de Privacidad
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
