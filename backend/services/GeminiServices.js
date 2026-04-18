@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 
 dotenv.config({ path: './.env' });
-const GOOGLE_API_KEY= "AIzaSyCmrHDuB7dPh8w9B0PqnNUP-93OgsntHgc"
+const GOOGLE_API_KEY= "AIzaSyCmrHDuB7dPh8w9B0PqnNUP-93OgsntHgc"//esta key es invalida puesto que no se pueden subir por seguridad a plataformas publica
 
 const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
 
