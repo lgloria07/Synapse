@@ -15,7 +15,7 @@ export default function Home({navigation, route}) {
 
   const {titulo, resumen, quiz} = route.params;
 
-  //Manejar la creación y vista del documento 
+  //Manejar la creación y vista del documento  prueba
   const handleDocument = () => {
     console.log(resumen);
     generarDocumento();
