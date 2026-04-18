@@ -41,14 +41,13 @@ export default function RegisterScreen({ navigation }) {
       const user = userCredential.user;
 
       await updateProfile(user, { displayName: nombre });
+      console.log("ANTES DE FIRESTORE");
 
       await setDoc(doc(db, 'users', user.uid), {
         name: nombre,
         email: email,
         createdAt: new Date(),
       });
-
-      Alert.alert('Éxito', 'Cuenta creada exitosamente');
       navigation.replace('home');
     } catch (error) {
       console.log('Error code:', error.code);
