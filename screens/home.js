@@ -17,12 +17,10 @@ export default function Home({navigation, route}) {
 
   //Manejar la creación y vista del documento  prueba
   const handleDocument = () => {
-    if (!selectedMateria) return;
-
-    console.log(selectedMateria.resumen);
-    generarDocumento(selectedMateria);
+    openDocument();
   };
 
+  /*
   //Generación del documento 
  const generarDocumento = useCallback(async (materia) => {
 
@@ -50,26 +48,18 @@ export default function Home({navigation, route}) {
     }
 
   }, []);
+  */
 
   //Abrir el documento
-  const openDocument = useCallback(async (id) => {
-    //El ID unico del documento que debería generarse al almacenarlo dentro de Google Drive
-    const fileId = id;
-    //Formamos el path completo para abrir el documento
-    const url = `https://docs.google.com/document/d/${id}/edit`;
-
-    try {
+  const openDocument = useCallback(async () => {
+    const url = 'https://docs.google.com/document/d/1CEjlkjdUCJVdfg8JvdHQlTsbHIgHB8rxRmcbT5b-iW0/edit';
+    try{
       const available = await Linking.canOpenURL(url);
-      if(available){
-        await Linking.openURL(url);
-      }
-      else{
-        await Linking.openURL(url);
-      }
-    } catch(error){
-      console.log("Se ha producido un error al abrir el documento");
+      await Linking.openURL(url);
+    }catch(error){
+      console.log('Se ha producido un error al abrir el documento');
     }
-  });
+  })
 
   useEffect(() => {
     if (route.params?.nuevaMateria) {
@@ -103,7 +93,7 @@ export default function Home({navigation, route}) {
   const SubirAudio = () =>{
     navigation.navigate('audio');
   };
-  
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
